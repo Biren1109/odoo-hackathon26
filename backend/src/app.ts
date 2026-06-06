@@ -15,7 +15,7 @@ import { errorHandler } from './middlewares/error.middleware';
 // import purchaseOrderRoutes from './routes/purchaseOrder.routes';
 // import invoiceRoutes from './routes/invoice.routes';
 // import activityLogRoutes from './routes/activityLog.routes';
-// import notificationRoutes from './routes/notification.routes';
+// import notificationRoutes from './routes/notification.rougttes';
 // import reportRoutes from './routes/report.routes';
 
 const app = express();
