@@ -18,10 +18,10 @@ export async function getApprovals(req: Request, res: Response) {
     const approvals = await prisma.approval.findMany({
       where,
       include: {
-        rfq: true,
-        quotation: { include: { vendor: true } },
+        rfq: false, // removed since not in schema
+        quotation: { include: { vendor: true, rfq: true } },
         approver: { select: { firstName: true, lastName: true, email: true } },
-        timeline: { orderBy: { timestamp: 'asc' } },
+        timeline: { orderBy: { createdAt: 'asc' } },
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -41,17 +41,15 @@ export async function initiateApproval(req: Request, res: Response) {
     // Create Approval record at L1
     const approval = await prisma.approval.create({
       data: {
-        rfqId: data.rfqId,
         quotationId: data.quotationId,
         approverId: data.approverId,
         status: 'PENDING',
-        currentLevel: 'L1',
-        totalLevels: 2,
+        level: 'L1',
         timeline: {
           create: {
             level: 'L1',
             action: 'SUBMITTED',
-            actorName: actor.userId,   // replace with actual name in final
+            actorId: actor.userId,
             remarks: 'Approval initiated by procurement officer',
           },
         },
@@ -80,29 +78,29 @@ export async function initiateApproval(req: Request, res: Response) {
 // PATCH /api/approvals/:id/approve — manager approves (handles L1 → L2 → final)
 export async function approveApproval(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const { remarks } = approveRejectSchema.parse(req.body);
     const actor = (req as any).user;
 
     const approval = await prisma.approval.findUnique({
       where: { id },
-      include: { quotation: { include: { vendor: true } }, rfq: true },
+      include: { quotation: { include: { vendor: true, rfq: true } } },
     });
     if (!approval) return res.status(404).json({ message: 'Approval not found' });
     if (approval.status !== 'PENDING')
       return res.status(400).json({ message: 'Approval is no longer pending' });
 
-    if (approval.currentLevel === 'L1' && approval.totalLevels === 2) {
+    if (approval.level === 'L1') {
       // L1 approved → advance to L2
       const updated = await prisma.approval.update({
         where: { id },
         data: {
-          currentLevel: 'L2',
+          level: 'L2',
           timeline: {
             create: {
               level: 'L1',
               action: 'L1_APPROVED',
-              actorName: actor.userId,
+              actorId: actor.userId,
               remarks: remarks ?? 'L1 Approved — forwarded to L2',
             },
           },
@@ -116,7 +114,7 @@ export async function approveApproval(req: Request, res: Response) {
           userId: approval.approverId,
           type: 'APPROVAL',
           title: 'L2 Approval Required',
-          message: `L1 approved. Final L2 approval needed for ${approval.rfq.title}.`,
+          message: `L1 approved. Final L2 approval needed for ${approval.quotation.rfq.title}.`,
           entityType: 'approval',
           entityId: id,
         },
@@ -135,7 +133,7 @@ export async function approveApproval(req: Request, res: Response) {
             create: {
               level: 'L2',
               action: 'L2_APPROVED',
-              actorName: actor.userId,
+              actorId: actor.userId,
               remarks: remarks ?? 'Final L2 approval granted',
             },
           },
@@ -151,7 +149,7 @@ export async function approveApproval(req: Request, res: Response) {
     // Notify procurement officer (RFQ creator)
     await prisma.notification.create({
       data: {
-        userId: approval.rfq.createdById,
+        userId: approval.quotation.rfq.createdById,
         type: 'APPROVAL',
         title: 'Quotation Fully Approved ✅',
         message: `${approval.quotation.vendor.name}'s quotation has been approved. You can now generate a PO.`,
@@ -169,13 +167,13 @@ export async function approveApproval(req: Request, res: Response) {
 // PATCH /api/approvals/:id/reject — any level manager rejects (remarks mandatory)
 export async function rejectApproval(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const { remarks } = rejectSchema.parse(req.body);
     const actor = (req as any).user;
 
     const approval = await prisma.approval.findUnique({
       where: { id },
-      include: { quotation: { include: { vendor: true } }, rfq: true },
+      include: { quotation: { include: { vendor: true, rfq: true } } },
     });
     if (!approval) return res.status(404).json({ message: 'Approval not found' });
     if (approval.status !== 'PENDING')
@@ -189,9 +187,9 @@ export async function rejectApproval(req: Request, res: Response) {
           remarks,
           timeline: {
             create: {
-              level: approval.currentLevel,
+              level: approval.level,
               action: 'REJECTED',
-              actorName: actor.userId,
+              actorId: actor.userId,
               remarks,
             },
           },
@@ -207,7 +205,7 @@ export async function rejectApproval(req: Request, res: Response) {
     // Notify procurement officer
     await prisma.notification.create({
       data: {
-        userId: approval.rfq.createdById,
+        userId: approval.quotation.rfq.createdById,
         type: 'APPROVAL',
         title: 'Quotation Rejected ❌',
         message: `Quotation from ${approval.quotation.vendor.name} was rejected. Reason: ${remarks}`,
@@ -225,10 +223,10 @@ export async function rejectApproval(req: Request, res: Response) {
 // GET /api/approvals/:id/timeline — full timeline for an approval
 export async function getApprovalTimeline(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const timeline = await prisma.approvalTimeline.findMany({
       where: { approvalId: id },
-      orderBy: { timestamp: 'asc' },
+      orderBy: { createdAt: 'asc' },
     });
     return res.json({ success: true, data: timeline });
   } catch (error: any) {

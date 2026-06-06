@@ -57,8 +57,8 @@ export async function getEntityActivityLogs(req: Request, res: Response) {
     const skip = (Number(page) - 1) * Number(limit);
 
     const where = {
-      entityType: entityType.toUpperCase(),
-      entityId: id,
+      entityType: String(entityType).toUpperCase(),
+      entityId: String(id),
     };
 
     const [logs, total] = await Promise.all([

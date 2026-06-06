@@ -105,7 +105,7 @@ export async function createVendor(req: Request, res: Response) {
 export async function getVendorById(req: Request, res: Response) {
   try {
     const vendor = await prisma.vendor.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         contacts: true,
         _count: {
@@ -137,7 +137,7 @@ export async function updateVendor(req: Request, res: Response) {
     const actorId = (req as any).user.userId;
 
     const vendor = await prisma.vendor.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: vendorData,
       include: { contacts: true },
     });
@@ -163,7 +163,7 @@ export async function deleteVendor(req: Request, res: Response) {
     const actorId = (req as any).user.userId;
 
     const vendor = await prisma.vendor.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status: 'BLOCKED' },
     });
 
@@ -192,7 +192,7 @@ export async function updateVendorStatus(req: Request, res: Response) {
     const actorId = (req as any).user.userId;
 
     const vendor = await prisma.vendor.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status: parsed.data.status },
     });
 

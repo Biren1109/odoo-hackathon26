@@ -40,9 +40,9 @@ export async function createPurchaseOrder(req: Request, res: Response) {
         status: 'DRAFT',
         items: {
           create: quotation.items.map((item) => ({
-            productName: item.rfqItem.productName,
-            quantity: item.rfqItem.quantity,
-            unit: item.rfqItem.unit,
+            productName: item.rfqItem?.description || item.description,
+            quantity: item.rfqItem?.quantity || item.quantity || 1,
+            unit: item.rfqItem?.unit || 'Nos',
             unitPrice: item.unitPrice,
             totalPrice: item.totalPrice,
           })),
@@ -104,7 +104,7 @@ export async function getPurchaseOrderById(req: Request, res: Response) {
   try {
     const { id } = req.params;
     const po = await prisma.purchaseOrder.findUnique({
-      where: { id },
+      where: { id: String(req.params.id) },
       include: { vendor: true, items: true, quotation: { include: { rfq: true } } },
     });
     if (!po) return res.status(404).json({ message: 'Purchase order not found' });
@@ -124,7 +124,7 @@ export async function updatePOStatus(req: Request, res: Response) {
       return res.status(400).json({ message: 'Invalid status' });
 
     const updated = await prisma.purchaseOrder.update({
-      where: { id },
+      where: { id: String(req.params.id) },
       data: { status },
     });
     return res.json({ success: true, data: updated });

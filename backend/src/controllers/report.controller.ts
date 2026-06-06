@@ -62,7 +62,7 @@ export async function getVendorPerformance(req: Request, res: Response) {
         ? v.quotations.reduce((sum, q) => sum + q.totalAmount, 0) / quotesSubmitted
         : 0;
       const avgDelivery = quotesSubmitted
-        ? v.quotations.reduce((sum, q) => sum + (q.deliveryDays || 0), 0) / quotesSubmitted
+        ? v.quotations.reduce((sum, q) => sum + (parseInt(q.deliveryTimeline || '0') || 0), 0) / quotesSubmitted
         : 0;
 
       return {

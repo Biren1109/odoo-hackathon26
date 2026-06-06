@@ -40,7 +40,7 @@ export async function markNotificationRead(req: Request, res: Response) {
 
     // Verify this notification belongs to the requesting user
     const existing = await prisma.notification.findFirst({
-      where: { id: req.params.id, userId },
+      where: { id: String(req.params.id), userId },
     });
 
     if (!existing) {
@@ -48,7 +48,7 @@ export async function markNotificationRead(req: Request, res: Response) {
     }
 
     const notification = await prisma.notification.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { isRead: true },
     });
 

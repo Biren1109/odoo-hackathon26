@@ -39,8 +39,7 @@ export async function getRFQs(req: Request, res: Response) {
         include: {
           createdBy: { select: { firstName: true, lastName: true } },
           items: true,
-          attachments: true,
-          rfqVendors: {
+          vendors: {
             include: { vendor: { select: { id: true, name: true, status: true } } },
           },
           _count: { select: { quotations: true } },
@@ -116,21 +115,16 @@ export async function createRFQ(req: Request, res: Response) {
           deadline: new Date(parsed.data.deadline),
           createdById: actorId,
           items: {
-            create: parsed.data.items.map((item) => ({
+            create: parsed.data.items.map((item: any) => ({
               productName: item.productName,
               description: item.description,
               quantity: item.quantity,
               unit: item.unit,
             })),
           },
-          attachments:
-            attachmentData.length > 0
-              ? { create: attachmentData }
-              : undefined,
         },
         include: {
           items: true,
-          attachments: true,
           createdBy: { select: { firstName: true, lastName: true } },
         },
       });
@@ -152,12 +146,11 @@ export async function createRFQ(req: Request, res: Response) {
 export async function getRFQById(req: Request, res: Response) {
   try {
     const rfq = await prisma.rFQ.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         createdBy: { select: { firstName: true, lastName: true, email: true } },
         items: true,
-        attachments: true,
-        rfqVendors: {
+        vendors: {
           include: {
             vendor: {
               select: { id: true, name: true, email: true, status: true, rating: true },
@@ -189,7 +182,7 @@ export async function updateRFQ(req: Request, res: Response) {
 
     const actorId = (req as any).user.userId;
 
-    const existing = await prisma.rFQ.findUnique({ where: { id: req.params.id } });
+    const existing = await prisma.rFQ.findUnique({ where: { id: String(req.params.id) } });
     if (!existing) {
       return res.status(404).json({ message: 'RFQ not found' });
     }
@@ -206,7 +199,7 @@ export async function updateRFQ(req: Request, res: Response) {
 
     if (items && items.length > 0) {
       // Delete old items and recreate
-      await prisma.rFQItem.deleteMany({ where: { rfqId: req.params.id } });
+      await prisma.rFQItem.deleteMany({ where: { rfqId: String(req.params.id) } });
       updateData.items = {
         create: items.map((item) => ({
           productName: item.productName!,
@@ -218,9 +211,9 @@ export async function updateRFQ(req: Request, res: Response) {
     }
 
     const rfq = await prisma.rFQ.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: updateData,
-      include: { items: true, attachments: true },
+      include: { items: true },
     });
 
     await logActivity('RFQ', rfq.id, 'RFQ_UPDATED', actorId, { title: rfq.title });
@@ -238,7 +231,7 @@ export async function publishRFQ(req: Request, res: Response) {
     const actorId = (req as any).user.userId;
 
     const existing = await prisma.rFQ.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { items: true },
     });
 
@@ -253,17 +246,17 @@ export async function publishRFQ(req: Request, res: Response) {
     }
 
     const rfq = await prisma.rFQ.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status: 'PUBLISHED' },
       include: {
-        rfqVendors: { include: { vendor: true } },
+        vendors: { include: { vendor: true } },
         items: true,
       },
     });
 
     await logActivity('RFQ', rfq.id, 'RFQ_PUBLISHED', actorId, {
       title: rfq.title,
-      assignedVendors: rfq.rfqVendors.length,
+      assignedVendors: rfq.vendors.length,
     });
 
     return res.json({ message: 'RFQ published successfully', rfq });
@@ -282,7 +275,7 @@ export async function assignVendors(req: Request, res: Response) {
     }
 
     const actorId = (req as any).user.userId;
-    const rfqId = req.params.id;
+    const rfqId = String(req.params.id);
 
     const rfq = await prisma.rFQ.findUnique({
       where: { id: rfqId },

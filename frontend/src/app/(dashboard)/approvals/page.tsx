@@ -93,7 +93,7 @@ export default function ApprovalsPage() {
                     {/* Approval Timeline */}
                     <div className="mb-4">
                         <p className="font-semibold text-sm mb-2">Timeline</p>
-                        {selected.timeline?.map(t => (
+                        {selected.timeline?.map((t: any) => (
                             <div key={t.id} className="border-l-2 border-indigo-200 pl-3 mb-2">
                                 <p className="text-xs font-medium">{t.action} — {t.actor?.firstName} {t.actor?.lastName}</p>
                                 {t.remarks && <p className="text-xs text-slate-500">{t.remarks}</p>}

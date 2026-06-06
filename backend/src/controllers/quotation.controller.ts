@@ -60,7 +60,7 @@ export async function submitQuotation(req: Request, res: Response) {
 // PUT /api/quotations/:id — vendor edits (only if SUBMITTED status)
 export async function updateQuotation(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const data = updateQuotationSchema.parse(req.body);
 
     const existing = await prisma.quotation.findUnique({ where: { id } });
@@ -99,7 +99,7 @@ export async function updateQuotation(req: Request, res: Response) {
 // GET /api/quotations/rfq/:rfqId — all quotations for an RFQ
 export async function getQuotationsByRFQ(req: Request, res: Response) {
   try {
-    const { rfqId } = req.params;
+    const rfqId = String(req.params.rfqId);
     const quotations = await prisma.quotation.findMany({
       where: { rfqId },
       include: { vendor: true, items: { include: { rfqItem: true } } },
@@ -114,7 +114,7 @@ export async function getQuotationsByRFQ(req: Request, res: Response) {
 // GET /api/quotations/vendor/:vendorId — vendor views own quotations
 export async function getQuotationsByVendor(req: Request, res: Response) {
   try {
-    const { vendorId } = req.params;
+    const vendorId = String(req.params.vendorId);
     const quotations = await prisma.quotation.findMany({
       where: { vendorId },
       include: { rfq: true, items: true },
@@ -129,7 +129,7 @@ export async function getQuotationsByVendor(req: Request, res: Response) {
 // GET /api/quotations/compare/:rfqId — side-by-side comparison data
 export async function compareQuotations(req: Request, res: Response) {
   try {
-    const { rfqId } = req.params;
+    const rfqId = String(req.params.rfqId);
 
     const quotations = await prisma.quotation.findMany({
       where: { rfqId },
@@ -156,7 +156,7 @@ export async function compareQuotations(req: Request, res: Response) {
       isLowest: q.totalAmount === minTotal,   // flag lowest price vendor
       items: q.items.map((item) => ({
         rfqItemId: item.rfqItemId,
-        productName: item.rfqItem.productName,
+        description: item.rfqItem?.description || item.description,
         unitPrice: item.unitPrice,
         gstRate: item.gstRate,
         totalPrice: item.totalPrice,

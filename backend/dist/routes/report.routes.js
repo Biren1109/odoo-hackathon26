@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const role_middleware_1 = require("../middlewares/role.middleware");
+const report_controller_1 = require("../controllers/report.controller");
+const router = (0, express_1.Router)();
+router.get('/dashboard', auth_middleware_1.authenticate, report_controller_1.getDashboard);
+router.get('/vendor-performance', auth_middleware_1.authenticate, (0, role_middleware_1.authorize)('ADMIN', 'MANAGER'), report_controller_1.getVendorPerformance);
+router.get('/spending-summary', auth_middleware_1.authenticate, (0, role_middleware_1.authorize)('ADMIN', 'MANAGER', 'PROCUREMENT_OFFICER'), report_controller_1.getSpendingSummary);
+router.get('/monthly-trends', auth_middleware_1.authenticate, (0, role_middleware_1.authorize)('ADMIN', 'MANAGER'), report_controller_1.getMonthlyTrends);
+router.get('/export', auth_middleware_1.authenticate, (0, role_middleware_1.authorize)('ADMIN', 'MANAGER'), report_controller_1.exportReport);
+exports.default = router;

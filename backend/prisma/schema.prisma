@@ -177,6 +177,7 @@ model RFQItem {
   notes       String?
 
   rfq  RFQ  @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  quotationItems QuotationItem[]
 
   @@map("rfq_items")
 }
@@ -207,7 +208,7 @@ model Quotation {
   vendorId       String
   status         QuotationStatus @default(SUBMITTED)
   totalAmount    Float
-  deliveryDays   Int?
+  deliveryTimeline String?
   paymentTerms   String?
   notes          String?
   submittedAt    DateTime        @default(now())
@@ -217,6 +218,7 @@ model Quotation {
   vendor   Vendor    @relation(fields: [vendorId], references: [id])
   items    QuotationItem[]
   approval Approval?
+  purchaseOrder PurchaseOrder?
 
   @@map("quotations")
 }
@@ -227,13 +229,15 @@ model Quotation {
 model QuotationItem {
   id           String  @id @default(uuid())
   quotationId  String
-  description  String
-  quantity     Float
+  rfqItemId    String?
+  description  String?
+  quantity     Float?
   unitPrice    Float
   gstRate      Float   @default(18)
   totalPrice   Float
 
   quotation  Quotation  @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  rfqItem    RFQItem?   @relation(fields: [rfqItemId], references: [id])
 
   @@map("quotation_items")
 }
@@ -295,6 +299,7 @@ model PurchaseOrder {
   createdBy  User      @relation("POCreator", fields: [createdById], references: [id])
   items      POItem[]
   invoice    Invoice?
+  quotation  Quotation @relation(fields: [quotationId], references: [id])
 
   @@map("purchase_orders")
 }
@@ -305,8 +310,10 @@ model PurchaseOrder {
 model POItem {
   id          String @id @default(uuid())
   poId        String
-  description String
+  productName String?
+  description String?
   quantity    Float
+  unit        String?
   unitPrice   Float
   totalPrice  Float
 
@@ -350,8 +357,10 @@ model Invoice {
 model InvoiceItem {
   id          String @id @default(uuid())
   invoiceId   String
-  description String
+  productName String?
+  description String?
   quantity    Float
+  unit        String?
   unitPrice   Float
   totalPrice  Float
 

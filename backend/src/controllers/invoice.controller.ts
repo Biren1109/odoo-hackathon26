@@ -88,10 +88,10 @@ export async function getInvoices(req: Request, res: Response) {
 // GET /api/invoices/:id — invoice detail
 export async function getInvoiceById(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const invoice = await prisma.invoice.findUnique({
       where: { id },
-      include: { vendor: true, items: true, po: { include: { quotation: { include: { rfq: true } } } } },
+      include: { vendor: true, items: true, po: true },
     });
     if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
     return res.json({ success: true, data: invoice });
@@ -103,7 +103,7 @@ export async function getInvoiceById(req: Request, res: Response) {
 // GET /api/invoices/:id/pdf — generate and stream PDF
 export async function downloadInvoicePDF(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
 
     const invoice = await prisma.invoice.findUnique({
       where: { id },
@@ -142,7 +142,7 @@ export async function downloadInvoicePDF(req: Request, res: Response) {
 // POST /api/invoices/:id/send-email — generate PDF and email it to vendor
 export async function sendInvoiceViaEmail(req: Request, res: Response) {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const actor = (req as any).user;
 
     const invoice = await prisma.invoice.findUnique({
@@ -202,7 +202,7 @@ export async function updateInvoiceStatus(req: Request, res: Response) {
       return res.status(400).json({ message: 'Invalid status' });
 
     const updated = await prisma.invoice.update({
-      where: { id },
+      where: { id: String(req.params.id) },
       data: { status },
     });
     return res.json({ success: true, data: updated });
