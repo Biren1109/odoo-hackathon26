@@ -50,60 +50,60 @@ export default function SignupPage() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-sm font-medium">First Name</label>
-                            <input {...register('firstName')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                            <label className="label">First Name</label>
+                            <input {...register('firstName')} className="input" />
                             {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName.message}</p>}
                         </div>
                         <div>
-                            <label className="text-sm font-medium">Last Name</label>
-                            <input {...register('lastName')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                            <label className="label">Last Name</label>
+                            <input {...register('lastName')} className="input" />
                             {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName.message}</p>}
                         </div>
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Username</label>
-                        <input {...register('username')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                        <label className="label">Username</label>
+                        <input {...register('username')} className="input" />
                         {errors.username && <p className="text-red-500 text-xs">{errors.username.message}</p>}
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Email</label>
-                        <input {...register('email')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                        <label className="label">Email</label>
+                        <input {...register('email')} className="input" />
                         {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-sm font-medium">Phone</label>
-                            <input {...register('phone')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                            <label className="label">Phone</label>
+                            <input {...register('phone')} className="input" />
                         </div>
                         <div>
-                            <label className="text-sm font-medium">Country</label>
-                            <input {...register('country')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                            <label className="label">Country</label>
+                            <input {...register('country')} className="input" />
                         </div>
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Role</label>
-                        <select {...register('role')} className="w-full border rounded-lg p-2 mt-1 text-sm">
+                        <label className="label">Role</label>
+                        <select {...register('role')} className="input">
                             <option value="OFFICER">Procurement Officer</option>
                             <option value="MANAGER">Manager / Approver</option>
                             <option value="VENDOR">Vendor</option>
                         </select>
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Password</label>
-                        <input {...register('password')} type="password" className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                        <label className="label">Password</label>
+                        <input {...register('password')} type="password" className="input" />
                         {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Confirm Password</label>
-                        <input {...register('confirmPassword')} type="password" className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                        <label className="label">Confirm Password</label>
+                        <input {...register('confirmPassword')} type="password" className="input" />
                         {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword.message}</p>}
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Additional Info (optional)</label>
-                        <textarea {...register('additionalInfo')} className="w-full border rounded-lg p-2 mt-1 text-sm" rows={2} />
+                        <label className="label">Additional Info (optional)</label>
+                        <textarea {...register('additionalInfo')} className="input" rows={2} />
                     </div>
                     <button type="submit" disabled={isSubmitting}
-                        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                        className="w-full btn-primary py-2.5">
                         {isSubmitting ? 'Creating...' : 'Create Account'}
                     </button>
                 </form>

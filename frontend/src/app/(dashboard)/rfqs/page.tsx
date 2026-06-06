@@ -26,13 +26,13 @@ export default function RFQsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">RFQs</h1>
-        <button onClick={() => router.push('/rfqs/create')} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">+ Create RFQ</button>
+        <h1 className="page-title">RFQs</h1>
+        <button onClick={() => router.push('/rfqs/create')} className="btn-primary">+ Create RFQ</button>
       </div>
 
       <div className="flex gap-3 mb-4">
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search RFQs..." className="border rounded-lg p-2 text-sm flex-1" />
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-lg p-2 text-sm">
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search RFQs..." className="input mt-0 flex-1" />
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="select mt-0 w-40">
           <option value="">All Status</option>
           <option value="DRAFT">Draft</option>
           <option value="PUBLISHED">Published</option>
@@ -40,15 +40,15 @@ export default function RFQsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-slate-500">
-            <tr><th className="p-4">Title</th><th>Status</th><th>Deadline</th><th>Vendors</th><th>Created By</th></tr>
+      <div className="table-wrap">
+        <table className="w-full text-sm text-slate-800">
+          <thead className="table-head">
+            <tr><th className="p-4">Title</th><th className="p-4">Status</th><th className="p-4">Deadline</th><th className="p-4">Vendors</th><th className="p-4">Created By</th></tr>
           </thead>
           <tbody>
             {rfqs.map(rfq => (
-              <tr key={rfq.id} className="border-t hover:bg-slate-50 cursor-pointer" onClick={() => router.push(`/rfqs/${rfq.id}`)}>
-                <td className="p-4 font-medium">{rfq.title}</td>
+              <tr key={rfq.id} className="table-row cursor-pointer" onClick={() => router.push(`/rfqs/${rfq.id}`)}>
+                <td className="p-4 font-medium text-slate-900">{rfq.title}</td>
                 <td><span className={`${statusColor[rfq.status]} px-2 py-0.5 rounded text-xs`}>{rfq.status}</span></td>
                 <td>{new Date(rfq.deadline).toLocaleDateString()}</td>
                 <td>{rfq.vendors?.length ?? 0}</td>

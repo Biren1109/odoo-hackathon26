@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --vb-bg: #f8fafc;
+  --vb-text: #0f172a;
+  --vb-muted: #64748b;
+  --vb-border: #e2e8f0;
+  --vb-card: #ffffff;
+  --vb-primary: #4f46e5;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--vb-bg);
+  color: var(--vb-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .page-title {
+    @apply text-2xl font-bold text-slate-900;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-slate-900;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-200;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-slate-700;
+  }
+
+  .input {
+    @apply w-full border border-slate-300 rounded-lg px-3 py-2 mt-1 text-sm bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+  }
+
+  .select {
+    @apply w-full border border-slate-300 rounded-lg px-3 py-2 mt-1 text-sm bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors;
+  }
+
+  .btn-secondary {
+    @apply border border-slate-300 text-slate-700 bg-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors;
+  }
+
+  .table-wrap {
+    @apply bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200;
+  }
+
+  .table-head {
+    @apply bg-slate-50 text-slate-600 text-left text-xs uppercase tracking-wide;
+  }
+
+  .table-row {
+    @apply border-t border-slate-100 text-slate-800 hover:bg-slate-50;
+  }
+
+  .stat-card {
+    @apply bg-white border border-slate-200 rounded-xl p-5 shadow-sm;
+  }
+
+  .stat-label {
+    @apply text-sm font-medium text-slate-500;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-slate-900 mt-1;
+  }
 }

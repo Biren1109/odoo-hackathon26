@@ -8,22 +8,22 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'OFFICER', 'MANAGER', 'VENDOR'] },
-    { href: '/vendors', label: 'Vendors', icon: Users, roles: ['ADMIN', 'OFFICER', 'MANAGER'] },
-    { href: '/rfqs', label: 'RFQs', icon: FileText, roles: ['ADMIN', 'OFFICER', 'MANAGER', 'VENDOR'] },
-    { href: '/quotations', label: 'Quotations', icon: ClipboardList, roles: ['OFFICER', 'MANAGER', 'VENDOR'] },
-    { href: '/approvals', label: 'Approvals', icon: CheckCircle, roles: ['MANAGER', 'OFFICER'] },
-    { href: '/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart, roles: ['ADMIN', 'OFFICER', 'MANAGER'] },
-    { href: '/invoices', label: 'Invoices', icon: Receipt, roles: ['ADMIN', 'OFFICER', 'MANAGER'] },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'PROCUREMENT_OFFICER', 'MANAGER', 'VENDOR'] },
+    { href: '/vendors', label: 'Vendors', icon: Users, roles: ['ADMIN', 'PROCUREMENT_OFFICER', 'MANAGER'] },
+    { href: '/rfqs', label: 'RFQs', icon: FileText, roles: ['ADMIN', 'PROCUREMENT_OFFICER', 'MANAGER', 'VENDOR'] },
+    { href: '/quotations', label: 'Quotations', icon: ClipboardList, roles: ['PROCUREMENT_OFFICER', 'MANAGER', 'VENDOR'] },
+    { href: '/approvals', label: 'Approvals', icon: CheckCircle, roles: ['MANAGER', 'PROCUREMENT_OFFICER'] },
+    { href: '/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart, roles: ['ADMIN', 'PROCUREMENT_OFFICER', 'MANAGER'] },
+    { href: '/invoices', label: 'Invoices', icon: Receipt, roles: ['ADMIN', 'PROCUREMENT_OFFICER', 'MANAGER'] },
     { href: '/activity-logs', label: 'Activity Logs', icon: Activity, roles: ['ADMIN', 'MANAGER'] },
-    { href: '/reports', label: 'Reports', icon: BarChart2, roles: ['ADMIN', 'MANAGER', 'OFFICER'] },
+    { href: '/reports', label: 'Reports', icon: BarChart2, roles: ['ADMIN', 'MANAGER', 'PROCUREMENT_OFFICER'] },
 ];
 
 export default function Sidebar() {
     const pathname = usePathname();
     const { user } = useAuthStore();
 
-    const filtered = navItems.filter(item => user && item.roles.includes(user.role));
+    const filtered = navItems.filter(item => user && item.roles.includes(user.role as string));
 
     return (
         <aside className="w-64 min-h-screen bg-slate-900 text-white flex flex-col p-4">

@@ -43,17 +43,17 @@ export default function LoginPage() {
                 <p className="text-slate-500 mb-6">Sign in to your account</p>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
-                        <label className="text-sm font-medium">Email</label>
-                        <input {...register('email')} className="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="you@company.com" />
+                        <label className="label">Email</label>
+                        <input {...register('email')} className="input" placeholder="you@company.com" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
                     </div>
                     <div>
-                        <label className="text-sm font-medium">Password</label>
-                        <input {...register('password')} type="password" className="w-full border rounded-lg p-2 mt-1 text-sm" />
+                        <label className="label">Password</label>
+                        <input {...register('password')} type="password" className="input" />
                         {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
                     </div>
                     <button type="submit" disabled={isSubmitting}
-                        className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                        className="w-full btn-primary py-2.5">
                         {isSubmitting ? 'Signing in...' : 'Sign In'}
                     </button>
                 </form>

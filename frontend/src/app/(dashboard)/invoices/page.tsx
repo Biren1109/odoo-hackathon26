@@ -20,23 +20,23 @@ export default function InvoicesPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-6">Invoices</h1>
+            <h1 className="page-title mb-6">Invoices</h1>
             <div className="mb-4">
-                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-lg p-2 text-sm">
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="select mt-0 w-48">
                     <option value="">All Status</option>
                     <option value="DRAFT">Draft</option>
                     <option value="ISSUED">Issued</option>
                     <option value="PAID">Paid</option>
                 </select>
             </div>
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-500 text-left">
-                        <tr><th className="p-4">Invoice #</th><th>PO #</th><th>Vendor</th><th>Total</th><th>Status</th><th>Issued</th></tr>
+            <div className="table-wrap">
+                <table className="w-full text-sm text-slate-800">
+                    <thead className="table-head">
+                        <tr><th className="p-4">Invoice #</th><th className="p-4">PO #</th><th className="p-4">Vendor</th><th className="p-4">Total</th><th className="p-4">Status</th><th className="p-4">Issued</th></tr>
                     </thead>
                     <tbody>
                         {invoices.map(inv => (
-                            <tr key={inv.id} className="border-t hover:bg-slate-50 cursor-pointer" onClick={() => router.push(`/invoices/${inv.id}`)}>
+                            <tr key={inv.id} className="table-row cursor-pointer" onClick={() => router.push(`/invoices/${inv.id}`)}>
                                 <td className="p-4 font-mono text-xs">{inv.invoiceNumber}</td>
                                 <td className="font-mono text-xs">{inv.poNumber}</td>
                                 <td>{inv.vendor?.name}</td>

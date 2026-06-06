@@ -29,7 +29,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="h-14 bg-white border-b px-6 flex items-center justify-between">
+        <header className="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between text-slate-800">
             <div className="text-sm text-slate-500">
                 Welcome, <span className="font-semibold text-slate-800">{user?.firstName}</span>
                 <span className="ml-2 text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded">{user?.role}</span>

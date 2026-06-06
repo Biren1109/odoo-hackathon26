@@ -44,11 +44,11 @@ export default function ApprovalsPage() {
         <div className="flex gap-6">
             {/* Main List */}
             <div className="flex-1">
-                <h1 className="text-2xl font-bold mb-6">Approvals</h1>
+                <h1 className="page-title mb-6">Approvals</h1>
                 <div className="flex gap-2 mb-4">
                     {TABS.map(t => (
                         <button key={t} onClick={() => setTab(t)}
-                            className={`px-4 py-1.5 rounded-lg text-sm ${tab === t ? 'bg-indigo-600 text-white' : 'border hover:bg-slate-100'}`}>
+                            className={`px-4 py-1.5 rounded-lg text-sm font-medium ${tab === t ? 'bg-indigo-600 text-white' : 'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50'}`}>
                             {t}
                         </button>
                     ))}
@@ -57,7 +57,7 @@ export default function ApprovalsPage() {
                 <div className="space-y-3">
                     {approvals.map(a => (
                         <div key={a.id} onClick={() => setSelected(a)}
-                            className="bg-white rounded-xl p-4 shadow-sm cursor-pointer hover:border-indigo-300 border border-transparent transition">
+                            className="card p-4 cursor-pointer hover:border-indigo-300 transition text-slate-800">
                             <div className="flex justify-between items-start">
                                 <div>
                                     <p className="font-medium">{a.quotation?.rfq?.title ?? 'RFQ'}</p>
