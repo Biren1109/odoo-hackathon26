@@ -35,16 +35,16 @@ export default function VendorsPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Vendor Management</h1>
-        <button onClick={() => setShowModal(true)} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">
+        <h1 className="page-title">Vendor Management</h1>
+        <button onClick={() => setShowModal(true)} className="btn-primary">
           + Add Vendor
         </button>
       </div>
 
       <div className="flex gap-3 mb-4">
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, GST..."
-          className="border rounded-lg p-2 text-sm flex-1" />
-        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-lg p-2 text-sm">
+          className="input mt-0 flex-1" />
+        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="select mt-0 w-40">
           <option value="">All Status</option>
           <option value="ACTIVE">Active</option>
           <option value="PENDING">Pending</option>
@@ -52,15 +52,15 @@ export default function VendorsPage() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-slate-500 text-left">
-            <tr><th className="p-4">Vendor Name</th><th>Email</th><th>GST No.</th><th>Category</th><th>Status</th><th>Actions</th></tr>
+      <div className="table-wrap">
+        <table className="w-full text-sm text-slate-800">
+          <thead className="table-head">
+            <tr><th className="p-4">Vendor Name</th><th className="p-4">Email</th><th className="p-4">GST No.</th><th className="p-4">Category</th><th className="p-4">Status</th><th className="p-4">Actions</th></tr>
           </thead>
           <tbody>
             {vendors.map(v => (
-              <tr key={v.id} className="border-t hover:bg-slate-50">
-                <td className="p-4 font-medium">{v.name}</td>
+              <tr key={v.id} className="table-row">
+                <td className="p-4 font-medium text-slate-900">{v.name}</td>
                 <td>{v.email}</td>
                 <td className="font-mono text-xs">{v.gstNumber}</td>
                 <td>{v.category}</td>
@@ -79,7 +79,7 @@ export default function VendorsPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-2xl">
             <div className="flex justify-between mb-4">
-              <h2 className="font-semibold text-lg">Add Vendor</h2>
+              <h2 className="section-title">Add Vendor</h2>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-700">×</button>
             </div>
             <VendorForm onSuccess={() => { setShowModal(false); fetchVendors(); }} />

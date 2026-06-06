@@ -20,23 +20,23 @@ export default function PurchaseOrdersPage() {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-6">Purchase Orders</h1>
+            <h1 className="page-title mb-6">Purchase Orders</h1>
             <div className="flex gap-3 mb-4">
-                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="border rounded-lg p-2 text-sm">
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="select mt-0 w-48">
                     <option value="">All Status</option>
                     <option value="DRAFT">Draft</option>
                     <option value="CONFIRMED">Confirmed</option>
                     <option value="DELIVERED">Delivered</option>
                 </select>
             </div>
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-500 text-left">
-                        <tr><th className="p-4">PO Number</th><th>Vendor</th><th>Grand Total</th><th>Status</th><th>Date</th></tr>
+            <div className="table-wrap">
+                <table className="w-full text-sm text-slate-800">
+                    <thead className="table-head">
+                        <tr><th className="p-4">PO Number</th><th className="p-4">Vendor</th><th className="p-4">Grand Total</th><th className="p-4">Status</th><th className="p-4">Date</th></tr>
                     </thead>
                     <tbody>
                         {pos.map(po => (
-                            <tr key={po.id} className="border-t hover:bg-slate-50 cursor-pointer" onClick={() => router.push(`/purchase-orders/${po.id}`)}>
+                            <tr key={po.id} className="table-row cursor-pointer" onClick={() => router.push(`/purchase-orders/${po.id}`)}>
                                 <td className="p-4 font-mono text-xs">{po.poNumber}</td>
                                 <td>{po.vendor?.name}</td>
                                 <td>₹{po.grandTotal?.toLocaleString()}</td>

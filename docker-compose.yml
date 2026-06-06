@@ -1,23 +1,21 @@
-# docker-compose.prod.yml
-
 version: '3.9'
 
 services:
 
   postgres:
     image: postgres:15-alpine
-    container_name: vendorbridge_db_prod
-    restart: always
+    container_name: vendorbridge_db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: vendorbridge
+      POSTGRES_PASSWORD: vendorbridge_secret
+      POSTGRES_DB: vendorbridge_dev
+    ports:
+      - "5433:5432"
     volumes:
-      - postgres_prod_data:/var/lib/postgresql/data
-    networks:
-      - vendorbridge_prod_net
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U vendorbridge"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,46 +25,41 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: production
-    container_name: vendorbridge_backend_prod
-    restart: always
+    container_name: vendorbridge_backend
+    restart: unless-stopped
     env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://vendorbridge:vendorbridge_secret@postgres:5432/vendorbridge_dev
+    ports:
+      - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - vendorbridge_prod_net
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       target: production
-    container_name: vendorbridge_frontend_prod
-    restart: always
+    container_name: vendorbridge_frontend
+    restart: unless-stopped
     env_file: ./frontend/.env.local
+    ports:
+      - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - vendorbridge_prod_net
 
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: vendorbridge_nginx_prod
-    restart: always
+    container_name: vendorbridge_nginx
+    restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
     depends_on:
       - frontend
       - backend
-    networks:
-      - vendorbridge_prod_net
 
 volumes:
-  postgres_prod_data:
-
-networks:
-  vendorbridge_prod_net:
-    driver: bridge
+  postgres_data:

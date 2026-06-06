@@ -25,39 +25,36 @@ export default function DashboardPage() {
   }, []);
 
   const cards = data ? [
-    { label: 'Active RFQs', value: data.activeRFQs, color: 'bg-blue-500' },
-    { label: 'Pending Approvals', value: data.pendingApprovals, color: 'bg-yellow-500' },
-    { label: 'POs This Month (₹)', value: `₹${(data.poThisMonthValue/100000).toFixed(1)}L`, color: 'bg-green-500' },
-    { label: 'Overdue Invoices', value: data.overdueInvoices, color: 'bg-red-500' },
+    { label: 'Active RFQs', value: data.activeRFQs, accent: 'border-l-blue-500' },
+    { label: 'Pending Approvals', value: data.pendingApprovals, accent: 'border-l-amber-500' },
+    { label: 'POs This Month (₹)', value: `₹${((data.poThisMonthValue || 0)/100000).toFixed(1)}L`, accent: 'border-l-green-500' },
+    { label: 'Overdue Invoices', value: data.overdueInvoices, accent: 'border-l-red-500' },
   ] : [];
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <h1 className="page-title mb-6">Dashboard</h1>
 
-      {/* Analytics Cards */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         {cards.map(c => (
-          <div key={c.label} className={`${c.color} text-white rounded-xl p-5`}>
-            <p className="text-sm opacity-80">{c.label}</p>
-            <p className="text-3xl font-bold mt-1">{c.value ?? '—'}</p>
+          <div key={c.label} className={`stat-card border-l-4 ${c.accent}`}>
+            <p className="stat-label">{c.label}</p>
+            <p className="stat-value">{c.value ?? '—'}</p>
           </div>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div className="flex gap-3 mb-8">
-        <button onClick={() => router.push('/rfqs/create')} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700">+ Create RFQ</button>
-        <button onClick={() => router.push('/vendors')} className="bg-slate-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-800">+ Add Vendor</button>
-        <button onClick={() => router.push('/approvals')} className="border px-4 py-2 rounded-lg text-sm hover:bg-slate-100">View Approvals</button>
-        <button onClick={() => router.push('/invoices')} className="border px-4 py-2 rounded-lg text-sm hover:bg-slate-100">Generate Invoice</button>
+      <div className="flex flex-wrap gap-3 mb-8">
+        <button onClick={() => router.push('/rfqs/create')} className="btn-primary">+ Create RFQ</button>
+        <button onClick={() => router.push('/vendors')} className="btn-secondary">+ Add Vendor</button>
+        <button onClick={() => router.push('/approvals')} className="btn-secondary">View Approvals</button>
+        <button onClick={() => router.push('/invoices')} className="btn-secondary">Generate Invoice</button>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
-        {/* Recent Purchase Orders */}
-        <div className="bg-white rounded-xl p-5 shadow-sm">
-          <h2 className="font-semibold mb-4">Recent Purchase Orders</h2>
-          <table className="w-full text-sm">
+        <div className="card p-5">
+          <h2 className="section-title mb-4">Recent Purchase Orders</h2>
+          <table className="w-full text-sm text-slate-800">
             <thead><tr className="text-left text-slate-500 border-b"><th className="pb-2">PO #</th><th>Vendor</th><th>Amount</th><th>Status</th></tr></thead>
             <tbody>
               {data?.recentPOs?.map((po: any) => (
@@ -73,9 +70,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Invoices */}
-        <div className="bg-white rounded-xl p-5 shadow-sm">
-          <h2 className="font-semibold mb-4">Recent Invoices</h2>
-          <table className="w-full text-sm">
+        <div className="card p-5">
+          <h2 className="section-title mb-4">Recent Invoices</h2>
+          <table className="w-full text-sm text-slate-800">
             <thead><tr className="text-left text-slate-500 border-b"><th className="pb-2">Invoice #</th><th>Vendor</th><th>Amount</th><th>Status</th></tr></thead>
             <tbody>
               {data?.recentInvoices?.map((inv: any) => (

@@ -49,41 +49,41 @@ export default function CreateRFQPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-2xl font-bold mb-6">Create RFQ</h1>
+      <h1 className="page-title mb-6">Create RFQ</h1>
       <form onSubmit={handleSubmit(d => onSubmit(d, false))} className="space-y-6">
 
         {/* Section 1: Basic Info */}
-        <div className="bg-white rounded-xl p-6 shadow-sm space-y-4">
-          <h2 className="font-semibold">RFQ Details</h2>
+        <div className="card p-6 space-y-4">
+          <h2 className="section-title">RFQ Details</h2>
           <div>
-            <label className="text-sm font-medium">Title *</label>
-            <input {...register('title')} className="w-full border rounded-lg p-2 mt-1 text-sm" />
+            <label className="label">Title *</label>
+            <input {...register('title')} className="input" />
             {errors.title && <p className="text-red-500 text-xs">{errors.title.message}</p>}
           </div>
           <div>
-            <label className="text-sm font-medium">Description</label>
-            <textarea {...register('description')} className="w-full border rounded-lg p-2 mt-1 text-sm" rows={3} />
+            <label className="label">Description</label>
+            <textarea {...register('description')} className="input" rows={3} />
           </div>
           <div>
-            <label className="text-sm font-medium">Deadline *</label>
-            <input {...register('deadline')} type="date" className="w-full border rounded-lg p-2 mt-1 text-sm" />
+            <label className="label">Deadline *</label>
+            <input {...register('deadline')} type="date" className="input" />
             {errors.deadline && <p className="text-red-500 text-xs">{errors.deadline.message}</p>}
           </div>
         </div>
 
         {/* Section 2: Items */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
+        <div className="card p-6">
           <div className="flex justify-between mb-4">
-            <h2 className="font-semibold">Products / Services</h2>
+            <h2 className="section-title">Products / Services</h2>
             <button type="button" onClick={() => append({ name: '', quantity: 1, unit: 'pcs' })}
               className="text-sm text-indigo-600 hover:underline">+ Add Item</button>
           </div>
           {fields.map((field, i) => (
             <div key={field.id} className="grid grid-cols-4 gap-2 mb-2 items-start">
-              <input {...register(`items.${i}.name`)} placeholder="Product name" className="border rounded p-2 text-sm col-span-2" />
-              <input {...register(`items.${i}.quantity`, { valueAsNumber: true })} type="number" placeholder="Qty" className="border rounded p-2 text-sm" />
+              <input {...register(`items.${i}.name`)} placeholder="Product name" className="input mt-0 py-1.5 col-span-2" />
+              <input {...register(`items.${i}.quantity`, { valueAsNumber: true })} type="number" placeholder="Qty" className="input mt-0 py-1.5" />
               <div className="flex gap-1">
-                <input {...register(`items.${i}.unit`)} placeholder="Unit" className="border rounded p-2 text-sm flex-1" />
+                <input {...register(`items.${i}.unit`)} placeholder="Unit" className="input mt-0 py-1.5 flex-1" />
                 <button type="button" onClick={() => remove(i)} className="text-red-400 px-1">×</button>
               </div>
             </div>

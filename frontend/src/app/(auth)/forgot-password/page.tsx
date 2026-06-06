@@ -26,7 +26,7 @@ export default function ForgotPasswordPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
             <div className="bg-white p-8 rounded-xl shadow w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-2">Forgot Password</h1>
+                <h1 className="text-2xl font-bold text-slate-900 mb-2">Forgot Password</h1>
                 <p className="text-slate-500 mb-6">Enter your email to receive a reset link.</p>
                 {sent ? (
                     <div className="bg-green-50 text-green-700 p-4 rounded-lg text-sm">
@@ -37,10 +37,10 @@ export default function ForgotPasswordPage() {
                         <input
                             type="email" value={email} onChange={e => setEmail(e.target.value)}
                             required placeholder="you@company.com"
-                            className="w-full border rounded-lg p-2 text-sm"
+                            className="input mt-0"
                         />
                         <button type="submit" disabled={loading}
-                            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50">
+                            className="w-full btn-primary py-2.5">
                             {loading ? 'Sending...' : 'Send Reset Link'}
                         </button>
                     </form>

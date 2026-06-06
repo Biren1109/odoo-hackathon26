@@ -28,9 +28,9 @@ export default function ActivityLogsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Activity Logs</h1>
+      <h1 className="page-title mb-6">Activity Logs</h1>
       <div className="flex gap-3 mb-6">
-        <select value={entityType} onChange={e => setEntityType(e.target.value)} className="border rounded-lg p-2 text-sm">
+        <select value={entityType} onChange={e => setEntityType(e.target.value)} className="select mt-0 w-48">
           <option value="">All Types</option>
           {Object.keys(entityIcons).map(k => <option key={k} value={k}>{k}</option>)}
         </select>
@@ -38,10 +38,10 @@ export default function ActivityLogsPage() {
 
       <div className="space-y-3">
         {logs.map(log => (
-          <div key={log.id} className="bg-white rounded-xl p-4 shadow-sm flex gap-4">
+          <div key={log.id} className="card p-4 flex gap-4 text-slate-800">
             <div className="text-2xl">{entityIcons[log.entityType] || '📌'}</div>
             <div className="flex-1">
-              <p className="text-sm font-medium">{log.action}</p>
+              <p className="text-sm font-medium text-slate-900">{log.action}</p>
               <p className="text-xs text-slate-500">
                 by {log.actor?.firstName} {log.actor?.lastName} · {log.entityType} #{log.entityId.slice(0, 8)}
               </p>

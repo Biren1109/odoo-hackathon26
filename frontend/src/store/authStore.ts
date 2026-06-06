@@ -6,7 +6,7 @@ interface User {
     firstName: string;
     lastName: string;
     email: string;
-    role: 'ADMIN' | 'OFFICER' | 'MANAGER' | 'VENDOR';
+    role: 'ADMIN' | 'PROCUREMENT_OFFICER' | 'MANAGER' | 'VENDOR';
     avatarUrl?: string;
 }
 
