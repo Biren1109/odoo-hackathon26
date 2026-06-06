@@ -16,7 +16,7 @@ import { errorHandler } from './middlewares/error.middleware';
 // import invoiceRoutes from './routes/invoice.routes';
 // import activityLogRoutes from './routes/activityLog.routes';
 // import notificationRoutes from './routes/notification.rougttes';
-// import reportRoutes from './routes/report.routes';
+import reportRoutes from './routes/report.routes';
 
 const app = express();
 
@@ -39,7 +39,7 @@ app.use('/api/auth', authRoutes);
 // app.use('/api/invoices', invoiceRoutes);     // P3
 // app.use('/api/activity-logs', activityLogRoutes);     // P2
 // app.use('/api/notifications', notificationRoutes);    // P2
-// app.use('/api/reports', reportRoutes);       // P1 — coming in next branch
+app.use('/api/reports', reportRoutes);       // P1 — coming in next branch
 
 app.get('/api/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 app.use(errorHandler);
