@@ -149,6 +149,9 @@ If you face any TypeScript typing errors regarding `VendorForm` or `ActivityLogs
 8. **Invoices**: Finally, convert the PO into an Invoice and click "Send Email" to automatically generate a PDF and dispatch it to the vendor.
 
 ## 👥 Contributors
-- Your Name / Team Odoo Hackathon
+- biren patel
+- meet patel
+- shlok thakkar
+- mehul rajput
 
 Happy Coding! 🚀
