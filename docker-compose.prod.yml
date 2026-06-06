@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: vendorbridge_db_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    networks:
+      - vendorbridge_prod_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: vendorbridge_backend_prod
+    restart: always
+    env_file: ./backend/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - vendorbridge_prod_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: vendorbridge_frontend_prod
+    restart: always
+    env_file: ./frontend/.env.local
+    depends_on:
+      - backend
+    networks:
+      - vendorbridge_prod_net
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: vendorbridge_nginx_prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - vendorbridge_prod_net
+
+volumes:
+  postgres_prod_data:
+
+networks:
+  vendorbridge_prod_net:
+    driver: bridge
